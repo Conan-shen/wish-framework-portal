@@ -133,7 +133,7 @@ export default {
   methods: {
 
     getService() {
-      const path = `http://wish-nginx-ui.com/api/services`;
+      const path = `http://wish-framework-portal.com/api/services`;
       axios.get(path).then(response => {
         this.items = response.data.data;
       }).catch(error => {
@@ -144,7 +144,7 @@ export default {
     /******************************************************/
     // ALL API
     getAllEndpoints(service_name) {
-      const path = `http://wish-nginx-ui.com/api/services/` + service_name;
+      const path = `http://wish-framework-portal.com/api/services/` + service_name;
       axios.get(path).then(response => {
         console.log(response.data.endpoints)
         this.edit_info.all_endpoints = response.data.endpoints
@@ -168,7 +168,7 @@ export default {
     },
 
     saveEdit() {
-      const path = 'http://wish-nginx-ui.com/api/services/' + this.edit_info.service_name;
+      const path = 'http://wish-framework-portal.com/api/services/' + this.edit_info.service_name;
       let params = {};
       params.endpoint = this.edit_info.endpoint;
       axios.put(path, params).then(response => {

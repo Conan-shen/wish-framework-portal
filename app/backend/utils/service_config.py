@@ -21,7 +21,7 @@ class Config(object):
 class ServiceConfig(object):
     def __init__(self):
         self.services = None
-        with open('/home/app/nginx-ui/app/backend/config/config.json',
+        with open('/home/app/wish-framework-portal/app/backend/config/config.json',
                   'r') as f:
             data = json.load(f)
             self.services = Config(**data)
@@ -30,7 +30,7 @@ class ServiceConfig(object):
             self.services.external_ip = os.getenv("EXTERNAL_ENV")
 
     def _save(self):
-        with open('/home/app/nginx-ui/app/backend/config/config.json',
+        with open('/home/app/wish-framework-portal/app/backend/config/config.json',
                   'w') as f:
             jsonstr = json.dumps(self.services, cls=EnhancedJSONEncoder)
             f.write(jsonstr)

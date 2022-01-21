@@ -9,7 +9,6 @@ ARG version_virtualenv=20.4.0
 RUN pip3 install virtualenv==$version_virtualenv
 
 
-
 FROM base AS app
 RUN useradd --create-home app
 # Put the app user from the base image in the sudo group for convenience
@@ -49,31 +48,21 @@ USER app
 RUN mkdir /home/app/virtualenv
 RUN virtualenv -p /usr/bin/python3.7 --no-download /home/app/virtualenv
 
-FROM backend AS nginx-ui
+FROM backend AS wish-framework-portal
 USER app
 ENV PYTHONDONTWRITEBYTECODE 1
 
 WORKDIR /home/app
-#ADD . /root/nginx-ui
 # For backend
-COPY ./app/backend/requirements /home/app/nginx-ui/app/backend/requirements
-RUN /home/app/virtualenv/bin/pip install --exists-action w -r /home/app/nginx-ui/app/backend/requirements
+COPY ./app/backend/requirements /home/app/wish-framework-portal/app/backend/requirements
+RUN /home/app/virtualenv/bin/pip install --exists-action w -r /home/app/wish-framework-portal/app/backend/requirements
 ENV PATH /home/app/virtualenv/bin:$PATH
 ENV VIRTUAL_ENV=/home/app/virtualenv
 ENV PYTHONIOENCODING=UTF-8
-ENV PYTHONPATH /home/app/nginx-ui
-
+ENV PYTHONPATH /home/app/wish-framework-portal
 
 WORKDIR /home/app
 RUN git clone https://github.com/Conan-shen/marlon-tools.git
 
-# For frontend
-#WORKDIR /root/nginx-ui/app/frontend
-#RUN npm install
-
-# For nginx
-#USER root
-#ADD wish-nginx-ui.conf /etc/nginx/conf.d/
-#RUN sudo service nginx start
 
 CMD ["/bin/bash", "-c", "echo Feel free to ctrl-c! Container will stick around. && while true ; do sleep 3600; done"]

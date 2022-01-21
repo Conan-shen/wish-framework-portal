@@ -3,10 +3,12 @@ networks:
   micro-net:
     external: true
 services:
-  nginx-ui:
-    container_name: nginx-ui
-    build: .
-    image: nginx-ui:latest
+  wish-framework-portal-dev:
+    container_name: wish-framework-portal-dev
+    build:
+      context: ../../
+      dockerfile: docker/dev/Dockerfile-dev
+    image: wish-framework-portal-dev:latest
     user: ${BUILDUID:-1000}:${BUILDGID:-1000}
     environment:
       - "DOCKER_USER=${USER:-app}"
@@ -15,7 +17,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./app:/home/app/nginx-ui/app
+      - ../../:/home/app/wish-framework-portal/
       - nginx:/etc/nginx
     networks:
       micro-net:
@@ -23,6 +25,6 @@ services:
     command:
       - /bin/bash
       - -c
-      - sudo service nginx start && sudo python2 /home/app/marlon-tools/tools/dnsproxy/dnsproxy.py -s 127.0.0.11 -H 0.0.0.0 --hosts-file=/home/app/nginx-ui/app/backend/config/hosts && while true ; do sleep 3600; done
+      - cd /home/app/wish-framework-portal && make all && while true ; do sleep 3600; done
 volumes:
   nginx:

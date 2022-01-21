@@ -1,0 +1,30 @@
+version: '3'
+networks:
+  micro-net:
+    external: true
+services:
+  wish-framework-portal:
+    container_name: wish-framework-portal
+    build:
+      context: ../../
+      dockerfile: docker/eks/Dockerfile
+    image: wish-framework-portal:latest
+#    image: harbor.infra.wish-cn.com/wish/wish-framework-portal/app:latest
+    user: ${BUILDUID:-1000}:${BUILDGID:-1000}
+    environment:
+      - "DOCKER_USER=${USER:-app}"
+    hostname: "$USER"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - nginx:/etc/nginx
+    networks:
+      micro-net:
+        ipv4_address: 192.168.100.2
+    command:
+      - /bin/bash
+      - -c
+      - cd /home/app/wish-framework-portal && make all && while true ; do sleep 3600; done
+volumes:
+  nginx:
