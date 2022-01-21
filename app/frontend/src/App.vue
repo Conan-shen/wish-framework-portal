@@ -6,13 +6,15 @@
       >
         <a href="/">
           <v-img
-              :src="require('./assets/nginx.png')"
+              :src="require('./assets/wishpost.png')"
               contain
               height="50"
-              width="50">
+              width="50"
+              style="margin-right: 10px"
+              >
           </v-img>
         </a>
-        <v-toolbar-title>Nginx UI</v-toolbar-title>
+        <v-toolbar-title>Framework Portal</v-toolbar-title>
       </v-app-bar>
       <v-main>
         <v-container fluid>
