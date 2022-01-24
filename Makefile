@@ -19,4 +19,4 @@ backend:
 frontend:
 	cd /home/app/wish-framework-portal/app/frontend && npm run serve &
 
-all: nginx dnsproxy backend frontend
+all: nginx dnsproxy backend  frontend
