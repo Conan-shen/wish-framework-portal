@@ -26,7 +26,9 @@
           <template v-slot:item.instance_id="{item}">
             <label>{{ item.instance_id }}
             </label>
-            <v-chip class="ma-2" v-for="val in item.tags" :key="val" v-show="item.tags.length !== 0">{{ val }}</v-chip>
+            <v-chip class="ma-2" v-for="val in item.tags" :key="val"
+                    v-show="item.tags.length !== 0">{{ val }}
+            </v-chip>
           </template>
           <template v-slot:item.action="{item}">
             <v-btn
@@ -61,8 +63,11 @@
                     dense
                 >
                   <template v-slot:item="{item}">
-                    <label>{{ item.instance_id + "(" + item.endpoint + ")" }} </label>
-                    <v-chip class="ma-2" v-for="val in item.tags" :key="val" v-show="item.tags.length !== 0">{{ val }}
+                    <label>{{
+                        item.instance_id + "(" + item.endpoint + ")"
+                      }} </label>
+                    <v-chip class="ma-2" v-for="val in item.tags" :key="val"
+                            v-show="item.tags.length !== 0">{{ val }}
                     </v-chip>
                   </template>
                 </v-autocomplete>
@@ -91,6 +96,57 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+
+      <v-dialog
+          v-model="edit_config_switch"
+          transition="dialog-bottom-transition"
+          max-width="440"
+          persistent
+      >
+        <v-card>
+          <v-card-title>
+            <span class="headline">Config</span>
+          </v-card-title>
+          <v-card-text>
+            <v-form ref="input_form" v-model="input_form_valid">
+            <v-row>
+              <v-col>
+                <v-text-field
+                    label="Username"
+                    v-model="config.user_name"
+                    :rules="getValidator(config.user_name)"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field
+                    label="External ip"
+                    v-model="config.external_ip"
+                    :rules="getValidator(config.external_ip)"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                class="ma-1"
+                color="primary"
+                plain
+                @click="setConfig"
+                :disabled="!input_form_valid"
+            >Save
+            </v-btn>
+          </v-card-actions>
+
+        </v-card>
+
+
+      </v-dialog>
+
+
     </v-container>
   </div>
 </template>
@@ -115,22 +171,58 @@ export default {
 
     search: '',
     items: [],
-
     edit_service_switch: false,
     edit_info: {
       service_name: '',
       endpoint: '',
       all_endpoints: [],
+    },
+    edit_config_switch: false,
+    input_form_valid: false,
+    config: {
+      user_name: '',
+      external_ip: '',
     }
-
   }),
 
   mounted() {
-    this.getService()
+    this.getService();
+    this.getConfig();
   },
 
 
   methods: {
+    getValidator: function(field) {
+      let res = []
+      if (field !== null && field.length) {
+        res.push(true)
+      } else {
+        res.push("Required")
+      }
+      return res
+    },
+    setConfig() {
+      const path = `http://wish-framework-portal.com/api/config`;
+      let params = {};
+      params.user_name = this.config.user_name;
+      params.external_ip = this.config.external_ip;
+      axios.post(path, params).then(response => {
+        console.log(response);
+      }).catch(error => {
+        console.log(error);
+      })
+      this.edit_config_switch = false;
+    },
+
+    getConfig() {
+      const path = `http://wish-framework-portal.com/api/config`;
+      axios.get(path).then(response => {
+        this.config = response.data.data;
+        this.edit_config_switch = this.config.user_name == null || this.config.user_name.length === 0;
+      }).catch(error => {
+        console.log(error);
+      })
+    },
 
     getService() {
       const path = `http://wish-framework-portal.com/api/services`;

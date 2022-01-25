@@ -3,6 +3,8 @@ from dataclasses import dataclass
 import dataclasses
 import os
 
+FILE_LOC = '/home/app/config/config.json'
+
 
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -16,22 +18,18 @@ class Config(object):
     service_config: dict
     local_service_config: dict
     external_ip: str
+    user_name: str
 
 
 class ServiceConfig(object):
     def __init__(self):
         self.services = None
-        with open('/home/app/wish-framework-portal/app/backend/config/config.json',
-                  'r') as f:
+        with open(FILE_LOC, 'r') as f:
             data = json.load(f)
             self.services = Config(**data)
 
-        if self.services.external_ip == "":
-            self.services.external_ip = os.getenv("EXTERNAL_ENV")
-
     def _save(self):
-        with open('/home/app/wish-framework-portal/app/backend/config/config.json',
-                  'w') as f:
+        with open(FILE_LOC, 'w') as f:
             jsonstr = json.dumps(self.services, cls=EnhancedJSONEncoder)
             f.write(jsonstr)
 
@@ -45,6 +43,10 @@ class ServiceConfig(object):
 
     def save_external_ip(self, ip):
         self.services.external_ip = ip
+        self._save()
+
+    def save_user_name(self, user_name):
+        self.services.user_name = user_name
         self._save()
 
 

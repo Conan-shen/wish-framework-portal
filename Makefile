@@ -1,10 +1,10 @@
-backend-dev:
+dev-backend:
 	docker exec -it wish-framework-portal sudo --preserve-env=PYTHONPATH /home/app/virtualenv/bin/uwsgi --http 0.0.0.0:8000 --wsgi-file /home/app/wish-framework-portal/app/backend/wsgi.py --callable app --threads 8
 
-frontend-install:
+dev-frontend-install:
 	docker exec -w /home/app/wish-framework-portal/app/frontend -it wish-framework-portal npm install
 
-frontend-dev:
+dev-frontend:
 	docker exec -w /home/app/wish-framework-portal/app/frontend -it wish-framework-portal npm run serve
 
 nginx:
@@ -19,4 +19,4 @@ backend:
 frontend:
 	cd /home/app/wish-framework-portal/app/frontend && npm run serve &
 
-all: nginx dnsproxy backend  frontend
+all: nginx dnsproxy backend frontend
