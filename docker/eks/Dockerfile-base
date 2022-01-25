@@ -58,6 +58,8 @@ ENV VIRTUAL_ENV=/home/app/virtualenv
 ENV PYTHONIOENCODING=UTF-8
 ENV PYTHONPATH /home/app/wish-framework-portal
 
+COPY ./app/backend/config /home/app/config
+
 
 #WORKDIR /home/app
 #RUN git clone https://github.com/Conan-shen/marlon-tools.git

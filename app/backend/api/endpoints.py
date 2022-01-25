@@ -10,6 +10,26 @@ from app.backend.utils.hosts import add_host
 from app.backend.utils.const import HOST
 
 
+@api.route('/config', methods=['GET'])
+def get_config():
+    user_name = sc.services.user_name
+    external_ip = sc.services.external_ip
+    response = {
+        "user_name": user_name,
+        "external_ip": external_ip
+    }
+    return flask.make_response({'success': True, 'data': response}), 200
+
+@api.route('/config', methods=['POST'])
+def set_config():
+    print("zzz", request.form, request.json)
+    user_name = request.json.get('user_name')
+    external_ip = request.json.get('external_ip')
+
+    sc.save_user_name(user_name)
+    sc.save_external_ip(external_ip)
+    return flask.make_response({'success': True})
+
 @api.route('/service/register', methods=['POST'])
 def register_service():
     # 1. 将服务注册到 consul

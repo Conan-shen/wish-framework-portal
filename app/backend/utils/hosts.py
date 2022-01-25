@@ -1,8 +1,10 @@
 
+FILE_LOC = '/home/app/config/hosts'
+
 def add_host(host, endpoint):
     in_file = False
     content = []
-    with open("/home/app/wish-framework-portal/app/backend/config/hosts", "r") as f:
+    with open(FILE_LOC, "r") as f:
         lines = f.readlines()
         for line in lines:
             if endpoint in line:
@@ -14,7 +16,7 @@ def add_host(host, endpoint):
     if not in_file:
         content.append(f"{host} {endpoint}\n")
 
-    with open("/home/app/wish-framework-portal/app/backend/config/hosts", "w") as f:
+    with open(FILE_LOC, "w") as f:
         f.writelines(content)
 
 

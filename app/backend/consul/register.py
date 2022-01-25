@@ -19,7 +19,7 @@ class ServiceInstance(object):
 class ConsulServiceRegistry(object):
     _consul = None
 
-    def __init__(self, host: str = "consul.service.consul.stage",
+    def __init__(self, host: str = "consul.k8sdev.bjs.i.wish.com",
                  port: int = 80, token: str = None):
         self.host = host
         self.port = port
